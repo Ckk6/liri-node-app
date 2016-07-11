@@ -45,13 +45,21 @@ function songs(tune){
 
 
  
-		spotify.search({ type: 'track', query: song }, function(err, data) {
+		spotify.search({ type: 'track', query: song, limit:1}, function(err, data) {
     		if ( err ) {
         		console.log('Error occurred: ' + err);
         return;
     } else{
-    	console.log(data);
+    	//console.log(JSON.stringify(data));
+    	//console.log(JSON.stringify(data, undefined, 2));
+    	//console.log(" is it album: " + data.tracks.items[0].album.album_type);
+    	console.log("Artist Name: " + data. tracks.items[0].artists[0].name);
+    	console.log("Song Name: " + song);
+    	console.log("Spotify Preview Link: " + data.tracks.items[0].preview_url);
+    	console.log("Album Name: " + data.tracks.items[0].album.name);
+
     }
+
  
     // Do something with 'data' 
 });

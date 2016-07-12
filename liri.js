@@ -2,6 +2,9 @@
 
 var  twit = require('./keys.js');
 var Twitter = require('twitter');
+var spotify = require('spotify');
+var request = require('request');
+var omdb = require('omdb');
 var client = new Twitter({
   consumer_key: twit.twitterKeys.consumer_key,
   consumer_secret: twit.twitterKeys.consumer_secret,
@@ -11,10 +14,11 @@ var client = new Twitter({
 //console.log('this is ',Twitter);
 //var twitterAPI = require('node-twitter-api');
 var select = process.argv[2];
-var tune = process.argv;
+var specify = process.argv;
 
-
+//========================================================================
 console.log (twit.twitterKeys.consumer_key);
+
  function twitt(client){
  	console.log('my-tweets selected'); 
  	console.log(client);
@@ -27,43 +31,83 @@ console.log (twit.twitterKeys.consumer_key);
 		});
  }
 
-function songs(tune){
-	var spotify = require('spotify');
-	opera = tune.splice(0,3);
-	console.log('opera is ' + opera) ;
-	console.log('tune is ' + tune);
-	song= "'";
-	
-	for (var i=0; i<tune.length; i++){
-		song+=tune[i]
-		if (i != tune.length - 1){
-			song+=" "
+
+
+ function songmovieprep(second){
+ 	//console.log('I am in songmovieprep')
+ 	opera = second.splice(0,3);
+	//console.log('opera is ' + opera) ;
+	//console.log('second is ' + second);
+	//console.log('second.length ' + second.length)
+	name= "'";
+	if (second.length != 0){
+		for (var i=0; i<second.length; i++){
+			name += second[i];
+			if (i != second.length - 1){
+				name += " "; 
+
+			}
 		}
+		name += "'";
+		console.log('this is '+ name);
+	}else {
+		name = null;
+	}	
+ }
+
+function songs(song){
+	
+	if (song === null){
+		song ='what\'s my age again ';
 	}
-	song += "'"
-	console.log('this is '+ song);
-
-
- 
+	
 		spotify.search({ type: 'track', query: song, limit:1}, function(err, data) {
     		if ( err ) {
         		console.log('Error occurred: ' + err);
         return;
     } else{
+
     	//console.log(JSON.stringify(data));
     	//console.log(JSON.stringify(data, undefined, 2));
     	//console.log(" is it album: " + data.tracks.items[0].album.album_type);
-    	console.log("Artist Name: " + data. tracks.items[0].artists[0].name);
+    	console.log('=====================================================')
+    	console.log("Artist Name: " + data.tracks.items[0].artists[0].name);
     	console.log("Song Name: " + song);
     	console.log("Spotify Preview Link: " + data.tracks.items[0].preview_url);
     	console.log("Album Name: " + data.tracks.items[0].album.name);
-
+    	console.log('=====================================================')
     }
 
  
-    // Do something with 'data' 
-});
+   });
 }
+
+//====================================================================
+	function theatre(movie){
+		if (movie === null){
+			movie = 'Mr. Nobody'
+		}
+
+		omdb.get({ title: movie }, true, function(err, movie) {
+    		if(err) {
+        		return console.error(err);
+    		}
+
+    		if(!movie) {
+        		return console.log('Movie not found!');
+    		}
+
+    		console.log('=====================================================================');
+    		console.log('%s (%d) %d/10', movie.title, movie.year, movie.imdb.rating);
+    		console.log(movie.plot);
+    		console.log('=====================================================================');
+    
+    	});
+    }
+
+
+
+//==================================================================================
 
 switch(select) {
 	case 'my-tweets':
@@ -80,11 +124,14 @@ switch(select) {
 
 	case 'spotify-this-song':
 		console.log('spotify-this-song selected');
-		songs(tune);
+		songmovieprep(specify);
+		songs(name);
 		break;
 
 	case 'movie-this':
 		console.log('movie-this selected');
+		songmovieprep(specify);
+		theatre(name);
 		break;
 
 	case 'do-what-it-says':

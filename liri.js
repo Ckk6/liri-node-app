@@ -4,7 +4,9 @@ var  twit = require('./keys.js');
 var Twitter = require('twitter');
 var spotify = require('spotify');
 var request = require('request');
-var omdb = require('omdb');
+var fs = require('fs');
+var filename = ('./random.txt');
+//var omdb = require('omdb');
 var client = new Twitter({
   consumer_key: twit.twitterKeys.consumer_key,
   consumer_secret: twit.twitterKeys.consumer_secret,
@@ -15,9 +17,12 @@ var client = new Twitter({
 //var twitterAPI = require('node-twitter-api');
 var select = process.argv[2];
 var specify = process.argv;
+var fileopt = false;
+
+choice(select,specify);
 
 //========================================================================
-console.log (twit.twitterKeys.consumer_key);
+//console.log (twit.twitterKeys.consumer_key);
 
  function twitt(client){
  	console.log('my-tweets selected'); 
@@ -31,9 +36,10 @@ console.log (twit.twitterKeys.consumer_key);
 		});
  }
 
-
+//========================================================================================
 
  function songmovieprep(second){
+ 	if (fileopt = false){
  	//console.log('I am in songmovieprep')
  	opera = second.splice(0,3);
 	//console.log('opera is ' + opera) ;
@@ -53,8 +59,13 @@ console.log (twit.twitterKeys.consumer_key);
 	}else {
 		name = null;
 	}	
- }
+}else{
+name = specify;
+}
+}
 
+
+//=======================================================
 function songs(song){
 	
 	if (song === null){
@@ -99,16 +110,42 @@ function songs(song){
 
     		console.log('=====================================================================');
     		console.log('%s (%d) %d/10', movie.title, movie.year, movie.imdb.rating);
+    		for (var c = 0; c < movie.actors.length; c++){
+    			console.log(movie.countries[c]);
+    		}
     		console.log(movie.plot);
+    		for (var m = 0; m < movie.actors.length; m++){
+    			console.log(movie.actors[m]);
+    		}
     		console.log('=====================================================================');
     
     	});
     }
 
+//=========================================================================================
+function fileoption(){
+	// must pass 'utf8' as 2nd argument
+	fs.readFile(filename, 'utf8', function(error,data){
+  		if (error){
+    		console.log('The error is '+ error);
 
+  		}
+  		else{
+   			console.log(data);
+   			var dataArray = data.split(',');
+   			select = dataArray[0];
+   			specify = dataArray[1];
+   			console.log(select);
+   			console.log(specify);
+   			fileopt = true;
+   			choice();
 
-//==================================================================================
-
+			}
+	});
+}
+//==========================================================================================
+function choice(){
+	console.log(select);
 switch(select) {
 	case 'my-tweets':
 		//console.log('my-tweets selected');
@@ -136,8 +173,15 @@ switch(select) {
 
 	case 'do-what-it-says':
 		console.log('do-what-it-says selected');
+		fileoption();
+		fileopt = false;
 		break;
 
+	default:
+		console.log('That was not a valid request.  Please select from my-tweets spotify-this-song or movie-this.');
 
 
+
+
+}
 }

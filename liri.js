@@ -1,12 +1,12 @@
 
 
-var  twit = require('./keys.js');
+var twit = require('./keys.js');
 var Twitter = require('twitter');
 var spotify = require('spotify');
 var request = require('request');
 var fs = require('fs');
 var filename = ('./random.txt');
-//var omdb = require('omdb');
+var omdb = require('omdb');
 var client = new Twitter({
   consumer_key: twit.twitterKeys.consumer_key,
   consumer_secret: twit.twitterKeys.consumer_secret,
@@ -19,7 +19,7 @@ var select = process.argv[2];
 var specify = process.argv;
 var fileopt = false;
 
-choice(select,specify);
+choice();
 
 //========================================================================
 //console.log (twit.twitterKeys.consumer_key);
@@ -39,7 +39,9 @@ choice(select,specify);
 //========================================================================================
 
  function songmovieprep(second){
- 	if (fileopt = false){
+ 	//console.log('fileopt', fileopt);
+ 	if (fileopt == false){
+ 		console.log(fileopt);
  	//console.log('I am in songmovieprep')
  	opera = second.splice(0,3);
 	//console.log('opera is ' + opera) ;
@@ -55,7 +57,7 @@ choice(select,specify);
 			}
 		}
 		name += "'";
-		console.log('this is '+ name);
+		//console.log('this is '+ name);
 	}else {
 		name = null;
 	}	
@@ -110,7 +112,7 @@ function songs(song){
 
     		console.log('=====================================================================');
     		console.log('%s (%d) %d/10', movie.title, movie.year, movie.imdb.rating);
-    		for (var c = 0; c < movie.actors.length; c++){
+    		for (var c = 0; c < movie.countries.length; c++){
     			console.log(movie.countries[c]);
     		}
     		console.log(movie.plot);
@@ -135,9 +137,7 @@ function fileoption(){
    			var dataArray = data.split(',');
    			select = dataArray[0];
    			specify = dataArray[1];
-   			console.log(select);
-   			console.log(specify);
-   			fileopt = true;
+    		fileopt = true;
    			choice();
 
 			}
@@ -145,34 +145,24 @@ function fileoption(){
 }
 //==========================================================================================
 function choice(){
-	console.log(select);
+	//console.log(select);
 switch(select) {
 	case 'my-tweets':
-		//console.log('my-tweets selected');
-		//var params = {screen_name: '@1undaunted1', count:20};
-		//client.get('statuses/user_timeline', params, function(error, tweets, response){
-  				//if (!error) {
-   				 //console.log(tweets);
-   		twitt(client);
+		twitt(client);
    		break;
-  							//}
-		//});
 		
 
 	case 'spotify-this-song':
-		console.log('spotify-this-song selected');
 		songmovieprep(specify);
 		songs(name);
 		break;
 
 	case 'movie-this':
-		console.log('movie-this selected');
 		songmovieprep(specify);
 		theatre(name);
 		break;
 
 	case 'do-what-it-says':
-		console.log('do-what-it-says selected');
 		fileoption();
 		fileopt = false;
 		break;

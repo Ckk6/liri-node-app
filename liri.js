@@ -25,13 +25,20 @@ choice();
 //console.log (twit.twitterKeys.consumer_key);
 
  function twitt(client){
- 	console.log('my-tweets selected'); 
- 	console.log(client);
+ 	//console.log('my-tweets selected'); 
+ 	//console.log(client);
 		var params = {screen_name: '@1undaunted1', count:20};
 		client.get('statuses/user_timeline', params, function(error, tweets, response){
   				if (!error) {
-  				console.log('we have data');
-   				 console.log(tweets);
+  				//console.log('====================we have data==============');
+   				 //console.log(tweets);
+   				 for (var t = 0; t<tweets.length; t++){
+   				 	console.log('=================================================');
+   				 	console.log('Tweet '+t+' created: ' + tweets[t].created_at);
+   				 	console.log(tweets[t].text);
+   				 	console.log('==================================================');
+   				 }
+
   							}
 		});
  }
@@ -39,15 +46,9 @@ choice();
 //========================================================================================
 
  function songmovieprep(second){
- 	//console.log('fileopt', fileopt);
- 	if (fileopt == false){
- 		console.log(fileopt);
- 	//console.log('I am in songmovieprep')
- 	opera = second.splice(0,3);
-	//console.log('opera is ' + opera) ;
-	//console.log('second is ' + second);
-	//console.log('second.length ' + second.length)
-	name= "'";
+  	if (fileopt == false){
+ 	 	opera = second.splice(0,3);
+		name= "'";
 	if (second.length != 0){
 		for (var i=0; i<second.length; i++){
 			name += second[i];
@@ -149,6 +150,7 @@ function choice(){
 switch(select) {
 	case 'my-tweets':
 		twitt(client);
+		//console.log(Twitter.)
    		break;
 		
 
